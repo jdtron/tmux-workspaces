@@ -17,7 +17,8 @@ set -g @plugin 'jdtron/tmux-workspaces'
 If you already have a running session, press `prefix + I` to install the plugin.
 
 ### Manual
-Clone this repository into the tmux plugins directory (`~/.tmux/plugins` or `~/.config/tmux/plugins`).
+Clone this repository into the tmux plugins directory (`~/.tmux/plugins` or `~/.config/tmux/plugins`).  
+Load `plugin.tmux` in your `tmux.conf`.
 
 ## Configuration
 Configuration is done through the usage of tmux options.  
@@ -28,8 +29,6 @@ Configuration is done through the usage of tmux options.
 | @workspaces-main-session  | MAIN         | Main session name (for executing `tmuxw -m` directly) |
 | @workspaces-key           | O            | Keybinding to trigger tmuxw                           |
 | @workspaces-chooser-width | 40           | Width of the workspace chooser                        |
-
-**Note**: Don't forget to include the plugin in your `tmux.conf`.
 
 ### Example
 ```
