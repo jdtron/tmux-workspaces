@@ -8,6 +8,15 @@ Please check the following packages are installed on your system:
 - fzf
 
 ## Installation
+### With [tpm](https://github.com/tmux-plugins/tpm)
+Add the plugin to your `tmux.conf` like so
+```
+set -g @plugin 'jdtron/tmux-workspaces'
+```
+
+If you already have a running session, press `prefix + I` to install the plugin.
+
+### Manual
 Clone this repository into the tmux plugins directory (`~/.tmux/plugins` or `~/.config/tmux/plugins`).
 
 ## Configuration
