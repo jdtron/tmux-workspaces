@@ -11,4 +11,4 @@ if [ "${orientation,,}" = 'left' ]; then
     split_flags="${split_flags}b"
 fi
 
-tmux bind-key $key run-shell "tmux splitw -${split_flags} -l $width $CURRENT_DIR/bin/tmuxw.sh"
+tmux bind-key $key splitw -${split_flags} -l $width $CURRENT_DIR/bin/tmuxw.sh
