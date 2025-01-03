@@ -110,6 +110,7 @@ main() {
         selected_dir="$parent$selected"
     done
 
+    spawn_main_session
     tmux switch-client -t "$parent$selected" 2>/dev/null && exit 0
     tmux new-session -d -c "$selected_dir" -s "${parent}${selected}" &>/dev/null \
         && tmux switch-client -t "${parent}${selected}" &>/dev/null \
