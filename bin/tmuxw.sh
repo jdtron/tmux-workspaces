@@ -32,7 +32,7 @@ tmux_get_option() {
     local opt="$1"      # str
     local default="$2"  # str
 
-    local value="$( tmux show-option -gqv "$opt" )"
+    local value="$( tmux show-option -gqv "$opt" 2>/dev/null )"
     if [ -n "$value" ]; then
         echo "$value"
     else
@@ -54,21 +54,21 @@ has_main_session() {
 
 # Spawn a new main session
 spawn_main_session() {
-    if ! has_main_session; then
+    if ! has_main_session &>/dev/null; then
         tmux new-session -d -s "$main_session" &>/dev/null
     fi
 }
 
 # Attach to main session
 attach_main_session() {
-    if ! has_main_session; then
+    if ! has_main_session &>/dev/null; then
         spawn_main_session
     fi
 
     if [ -n "$TMUX" ]; then
-        tmux switch-client -t "$main_session"
+        tmux switch-client -t "$main_session" &>/dev/null
     else
-        tmux new-session -s "$main_session" -A
+        tmux new-session -s "$main_session" -A &>/dev/null
     fi
 }
 
@@ -111,7 +111,7 @@ main() {
     done
 
     spawn_main_session
-    tmux switch-client -t "$parent$selected" 2>/dev/null && exit 0
+    tmux switch-client -t "$parent$selected" &>/dev/null && exit 0
     tmux new-session -d -c "$selected_dir" -s "${parent}${selected}" &>/dev/null \
         && tmux switch-client -t "${parent}${selected}" &>/dev/null \
         || tmux new-session -c "$selected_dir" -s "${parent}${selected}" -A &>/dev/null
