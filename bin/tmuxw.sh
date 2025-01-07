@@ -6,6 +6,8 @@ DEFAULT_MAIN_SESSION='MAIN'
 root_dir="$DEFAULT_ROOT_DIR"
 main_session="$DEFAULT_MAIN_SESSION"
 spawn_main_only=false
+initial_state="$TMUX"
+initial_main_session="$main_session"
 
 usage="Usage: $( basename "$0" ) [OPTIONS]
 
@@ -42,6 +44,10 @@ tmux_get_option() {
 
 # Load configuration options from tmux
 load_config() {
+    if ! has_main_session; then
+        spawn_main_session
+    fi
+
     root_dir="$( tmux_get_option '@workspaces-root' "$DEFAULT_ROOT_DIR" )"
     main_session="$( tmux_get_option '@workspaces-main-session' "$DEFAULT_MAIN_SESSION" )"
 }
@@ -56,6 +62,13 @@ has_main_session() {
 spawn_main_session() {
     if ! has_main_session &>/dev/null; then
         tmux new-session -d -s "$main_session" &>/dev/null
+    fi
+}
+
+# Kill the initial session
+kill_initial_session() {
+    if tmux has-session -t "$initial_main_session" &>/dev/null; then
+        tmux kill-session -t "$initial_main_session" &>/dev/null
     fi
 }
 
@@ -100,7 +113,12 @@ main() {
         exit 0
     fi
 
-    selected="$( choose_workspace "$root_dir" )" || exit 0
+    selected="$( choose_workspace "$root_dir" )"
+    if [ $? -gt 0 ] && [ -z "$initial_state" ]; then
+        kill_initial_session
+        exit 0
+    fi
+
     selected_dir="$root_dir/$selected"
 
     parent=
@@ -115,6 +133,10 @@ main() {
     tmux new-session -d -c "$selected_dir" -s "${parent}${selected}" &>/dev/null \
         && tmux switch-client -t "${parent}${selected}" &>/dev/null \
         || tmux new-session -c "$selected_dir" -s "${parent}${selected}" -A &>/dev/null
+
+    if [ -z "$initial_state" ] && [ "$initial_main_session" != "$main_session" ]; then
+        kill_initial_session
+    fi
 }
 
 main "$@"
