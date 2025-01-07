@@ -26,6 +26,7 @@ Configuration is done through the usage of tmux options.
 | Option                          | Default      | Description                                           |
 |---------------------------------|--------------|-------------------------------------------------------|
 | @workspaces-root                | ~/workspaces | Workspaces root directory                             |
+| @workspaces-main-enabled        | true         | Enable a main session                                 |
 | @workspaces-main-session        | MAIN         | Main session name (for executing `tmuxw -m` directly) |
 | @workspaces-key                 | O            | Keybinding to trigger tmuxw                           |
 | @workspaces-chooser-width       | 40           | Width of the workspace chooser                        |

@@ -5,6 +5,7 @@ DEFAULT_MAIN_SESSION='MAIN'
 
 root_dir="$DEFAULT_ROOT_DIR"
 main_session="$DEFAULT_MAIN_SESSION"
+main_enabled=true
 spawn_main_only=false
 initial_state="$TMUX"
 initial_main_session="$main_session"
@@ -50,6 +51,7 @@ load_config() {
 
     root_dir="$( tmux_get_option '@workspaces-root' "$DEFAULT_ROOT_DIR" )"
     main_session="$( tmux_get_option '@workspaces-main-session' "$DEFAULT_MAIN_SESSION" )"
+    main_enabled="$( tmux_get_option '@workspaces-main-enabled' true )"
 }
 
 # Check if tmux has a main session open
@@ -108,7 +110,11 @@ main() {
     load_config
     parse_args "$@"
 
-    if [ $spawn_main_only == true ]; then
+    if [ $spawn_main_only = true ] && [ $main_enabled != true ]; then
+        echo 'Main session is disaled'
+        kill_initial_session
+        exit 0
+    elif [ $spawn_main_only = true ]; then
         attach_main_session
         exit 0
     fi
