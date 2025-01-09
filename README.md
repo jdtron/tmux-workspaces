@@ -30,7 +30,7 @@ Configuration is done through the usage of tmux options.
 | @workspaces-main-session        | MAIN         | Main session name (for executing `tmuxw -m` directly) |
 | @workspaces-key                 | O            | Keybinding to trigger tmuxw                           |
 | @workspaces-chooser-width       | 40           | Width of the workspace chooser                        |
-| @workspaces-chooser-orientation | left         | Split left or right                                   |
+| @workspaces-chooser-display     | left         | Display as split `left`/`right` or `popup`            |
 
 ### Example
 ```
