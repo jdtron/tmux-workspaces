@@ -100,10 +100,8 @@ choose_workspace() {
 is_subdir() {
     local dir="$1"
 
-    case "$dir" in
-        *.d) return 0 ;;
-        *) return 1 ;;
-    esac
+    [ ! -f "$dir/.workspace" ] && return 1
+    return 0
 }
 
 main() {
@@ -129,13 +127,13 @@ main() {
 
     parent=
     while is_subdir "$selected_dir"; do
-        parent="$selected_dir"
+        parent="${parent}$( basename $selected_dir )/"
         selected="$( choose_workspace "$selected_dir" )" || exit 0
-        selected_dir="$parent$selected"
+        selected_dir="$selected_dir/$selected"
     done
 
     spawn_main_session
-    tmux switch-client -t "$parent$selected" &>/dev/null && exit 0
+    tmux switch-client -t "${parent}${selected}" &>/dev/null && exit 0
     tmux new-session -d -c "$selected_dir" -s "${parent}${selected}" &>/dev/null \
         && tmux switch-client -t "${parent}${selected}" &>/dev/null \
         || tmux new-session -c "$selected_dir" -s "${parent}${selected}" -A &>/dev/null
