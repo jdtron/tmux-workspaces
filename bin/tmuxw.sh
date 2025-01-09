@@ -118,8 +118,10 @@ main() {
     fi
 
     selected="$( choose_workspace "$root_dir" )"
-    if [ $? -gt 0 ] && [ -z "$initial_state" ]; then
-        kill_initial_session
+    if [ $? -gt 0 ]; then
+        if [ -z "$initial_state" ]; then
+            kill_initial_session
+        fi
         exit 0
     fi
 
